@@ -7,6 +7,8 @@
 # Uvoz potrebnih biblioteka
 import os
 import sys
+# Uvoz pomocnih funkcija iz utils modula
+from utils import prikupi_zadatke
 
 # Provjera i instalacija colorama biblioteke
 try:
@@ -84,8 +86,11 @@ def main():
         if odabir == "1":
             os.system('cls' if os.name == 'nt' else 'clear')
             ispisi_ascii_art()
-            print(Fore.YELLOW + "\n  [SJF] Modul još nije implementiran...")
-            print(Fore.WHITE  + "  Dolazi u sljedećem commitu!\n")
+            print(Fore.CYAN + "\n  === SJF ALGORITAM ===")
+            # Testiranje unosa zadataka
+            zadaci = prikupi_zadatke()
+            print(Fore.GREEN + f"\n  ✓ Uspješno uneseno {len(zadaci)} zadataka!")
+            input(Fore.WHITE + "\n  Pritisnite Enter za nastavak...")
 
         elif odabir == "2":
             os.system('cls' if os.name == 'nt' else 'clear')
