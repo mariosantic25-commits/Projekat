@@ -1,7 +1,7 @@
 # Modul za SJF (Shortest Job First) Non-Preemptive algoritam
 # Scenarij: Rutinski zadaci se raspoređuju po trajanju
 # Zadatak sa najkraćim burst time-om ide prvi
-# Autor: [Tvoje ime]
+# Autor: [Mario]
 
 from colorama import init, Fore, Style
 init(autoreset=True)
