@@ -9,6 +9,8 @@ import os
 import sys
 # Uvoz pomocnih funkcija iz utils modula
 from utils import prikupi_zadatke
+# Uvoz SJF modula
+from sjf import pokreni_sjf
 
 # Provjera i instalacija colorama biblioteke
 try:
@@ -86,11 +88,7 @@ def main():
         if odabir == "1":
             os.system('cls' if os.name == 'nt' else 'clear')
             ispisi_ascii_art()
-            print(Fore.CYAN + "\n  === SJF ALGORITAM ===")
-            # Testiranje unosa zadataka
-            zadaci = prikupi_zadatke()
-            print(Fore.GREEN + f"\n  ✓ Uspješno uneseno {len(zadaci)} zadataka!")
-            input(Fore.WHITE + "\n  Pritisnite Enter za nastavak...")
+            pokreni_sjf()
 
         elif odabir == "2":
             os.system('cls' if os.name == 'nt' else 'clear')
