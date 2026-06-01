@@ -1,28 +1,25 @@
 # Modul za vizualni prikaz rezultata - Orbital Command
 # Sadrži funkcije za ispis tabele, Gantt charta i prosjeka
-# Autor: [Mario Šantić]
+# Autor: [Mario]
 
 from colorama import init, Fore, Style
 init(autoreset=True)
 
-
 def ispisi_tabelu(zadaci):
     """
     Funkcija za ispis rezultata raspoređivanja u obliku tabele.
-    Svaki zadatak se ispisuje u boji prema svom tipu.
+    Nazivi koji su predugački se skraćuju da ne pomjeraju kolone.
 
     Parametri:
         zadaci - lista zadataka sa izračunatim vrijednostima
     """
 
-    # Mapa boja prema tipu zadatka
     boje = {
         1: Fore.RED,
         2: Fore.YELLOW,
         3: Fore.GREEN,
     }
 
-    # Mapa naziva tipa zadatka
     tipovi = {
         1: "KRITIČNO",
         2: "NAUČNO  ",
@@ -31,31 +28,50 @@ def ispisi_tabelu(zadaci):
 
     print(Fore.CYAN + "\n  === REZULTATI RASPOREĐIVANJA ===\n")
 
-    # Ispis zaglavlja tabele
-    print(Fore.WHITE + "  " + "=" * 85)
-    print(Fore.CYAN  + f"  {'#':<4} {'Naziv zadatka':<28} {'Tip':<10} "
-                       f"{'AT':>4} {'BT':>4} {'CT':>5} {'TAT':>5} {'WT':>5}")
-    print(Fore.WHITE + "  " + "=" * 85)
+    # Fiksne širine kolona
+    w_id    = 4
+    w_naziv = 25  # Naziv se skraćuje na 25 znakova
+    w_tip   = 11
+    w_num   = 6
 
-    # Ispis svakog zadatka u odgovarajućoj boji
+    # Zaglavlje
+    print(Fore.WHITE + "  " + "=" * 76)
+    print(Fore.CYAN  +
+          f"  {'#':<{w_id}}"
+          f"{'Naziv zadatka':<{w_naziv}}"
+          f"{'Tip':<{w_tip}}"
+          f"{'AT':>{w_num}}"
+          f"{'BT':>{w_num}}"
+          f"{'CT':>{w_num}}"
+          f"{'TAT':>{w_num}}"
+          f"{'WT':>{w_num}}")
+    print(Fore.WHITE + "  " + "=" * 76)
+
+    # Redovi tabele
     for z in zadaci:
-        boja  = boje.get(z["tip"], Fore.WHITE)
-        tip   = tipovi.get(z["tip"], "NEPOZNAT")
+        boja = boje.get(z["tip"], Fore.WHITE)
+        tip  = tipovi.get(z["tip"], "NEPOZNAT")
 
-        print(boja + f"  {z['id']:<4} {z['naziv']:<28} {tip:<10} "
-                     f"{z['arrival_time']:>4} {z['burst_time']:>4} "
-                     f"{z['completion_time']:>5} {z['turnaround_time']:>5} "
-                     f"{z['waiting_time']:>5}")
+        # Skrati naziv na max 24 znaka da ne pomjera kolone
+        naziv = z['naziv'][:24] if len(z['naziv']) > 24 else z['naziv']
 
-    print(Fore.WHITE + "  " + "=" * 85)
+        print(boja +
+              f"  {str(z['id']):<{w_id}}"
+              f"{naziv:<{w_naziv}}"
+              f"{tip:<{w_tip}}"
+              f"{z['arrival_time']:>{w_num}}"
+              f"{z['burst_time']:>{w_num}}"
+              f"{z['completion_time']:>{w_num}}"
+              f"{z['turnaround_time']:>{w_num}}"
+              f"{z['waiting_time']:>{w_num}}")
 
-    # Legenda
+    print(Fore.WHITE + "  " + "=" * 76)
+
     print(Fore.WHITE  + "\n  Legenda: "
           + Fore.RED    + "■ KRITIČNO  "
           + Fore.YELLOW + "■ NAUČNO  "
           + Fore.GREEN  + "■ RUTINSKO")
 
-    # Objašnjenje kolona
     print(Fore.WHITE + "\n  AT=Arrival Time  BT=Burst Time  "
                        "CT=Completion Time  TAT=Turnaround Time  WT=Waiting Time")
 
@@ -63,7 +79,7 @@ def ispisi_tabelu(zadaci):
 def ispisi_gantt(gantt_lista):
     """
     Funkcija za ispis Gantt charta u terminalu.
-    Prikazuje vremenski raspored izvršavanja zadataka.
+    Prikazuje blokove sa vremenom start → kraj pored svakog reda.
 
     Parametri:
         gantt_lista - lista tuplova (naziv_zadatka, start, kraj)
@@ -71,34 +87,30 @@ def ispisi_gantt(gantt_lista):
 
     print(Fore.CYAN + "\n  === GANTT CHART ===\n")
 
-    # Boje za Gantt blokove
     boje_gantt = [
         Fore.RED, Fore.YELLOW, Fore.GREEN,
         Fore.CYAN, Fore.MAGENTA, Fore.WHITE
     ]
 
-    # Ispis svakog bloka u Gantt chartu
+    ukupno_vrijeme = gantt_lista[-1][2] if gantt_lista else 0
+    SKALA = 1
+
     for index, (naziv, start, kraj) in enumerate(gantt_lista):
         boja     = boje_gantt[index % len(boje_gantt)]
         trajanje = kraj - start
 
-        # Svaka minuta = jedan znak "█"
-        blok = "█" * trajanje
+        razmak = " " * (start * SKALA)
+        blok   = "█" * (trajanje * SKALA)
 
-        # Skrati naziv ako je predugačak
-        kratki_naziv = naziv[:15] if len(naziv) > 15 else naziv
+        kratki_naziv = naziv[:14] if len(naziv) > 14 else naziv
 
-        print(boja + f"  {kratki_naziv:<16} |{blok}| "
-              + Fore.WHITE + f"{start} → {kraj} min")
+        # Blok + vrijeme s desne strane
+        print(boja +
+              f"  {kratki_naziv:<15}|{razmak}{blok} {start} → {kraj} min")
 
-    # Ispis vremenske ose
-    if gantt_lista:
-        ukupno_vrijeme = gantt_lista[-1][2]
-        print(Fore.WHITE + "\n  Vrijeme (min):")
-        print(Fore.WHITE + "  " + "".join(
-            str(i).ljust(5) for i in range(0, ukupno_vrijeme + 1, 5)
-        ))
-
+    # Jednostavna tekstualna osa na dnu
+    print(Fore.WHITE + "\n  Ukupno trajanje misije: "
+          + Fore.CYAN + f"{ukupno_vrijeme} min")
 
 def ispisi_prosjeke(prosjecno_cekanje, prosjecni_tat):
     """
@@ -110,11 +122,11 @@ def ispisi_prosjeke(prosjecno_cekanje, prosjecni_tat):
     """
 
     print(Fore.YELLOW + "\n  " + "=" * 45)
-    print(Fore.WHITE  + "  📊 STATISTIKA MISIJE:")
+    print(Fore.WHITE  + "  STATISTIKA MISIJE:")
     print(Fore.YELLOW + "  " + "=" * 45)
-    print(Fore.GREEN  + f"  ► Prosječno vrijeme čekanja : "
+    print(Fore.GREEN  + "  >> Prosjecno vrijeme cekanja : "
           + Fore.WHITE + f"{prosjecno_cekanje} min")
-    print(Fore.GREEN  + f"  ► Prosječni Turnaround Time : "
+    print(Fore.GREEN  + "  >> Prosjecni Turnaround Time : "
           + Fore.WHITE + f"{prosjecni_tat} min")
     print(Fore.YELLOW + "  " + "=" * 45)
 
