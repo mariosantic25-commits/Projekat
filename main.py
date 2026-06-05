@@ -11,6 +11,8 @@ import sys
 from utils import prikupi_zadatke
 # Uvoz SJF modula
 from sjf import pokreni_sjf
+# Uvoz Priority Scheduling modula
+from priority import pokreni_priority
 
 # Provjera i instalacija colorama biblioteke
 try:
@@ -99,8 +101,7 @@ def main():
         elif odabir == "3":
             os.system('cls' if os.name == 'nt' else 'clear')
             ispisi_ascii_art()
-            print(Fore.YELLOW + "\n  [Priority] Modul još nije implementiran...")
-            print(Fore.WHITE  + "  Dolazi u sljedećem commitu!\n")
+            pokreni_priority()
 
         elif odabir == "4":
             # Izlaz iz aplikacije
