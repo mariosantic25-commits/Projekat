@@ -15,6 +15,8 @@ from sjf import pokreni_sjf
 from priority import pokreni_priority
 # Uvoz SRTF modula
 from srtf import pokreni_srtf
+# Uvoz modula za uporednu analizu
+from analiza import pokreni_analizu
 
 # Provjera i instalacija colorama biblioteke
 try:
@@ -63,7 +65,8 @@ def ispisi_meni():
     print(Fore.WHITE  + "  [1] " + Fore.CYAN + "SJF - Rutinski zadaci (Non-Preemptive)")
     print(Fore.WHITE  + "  [2] " + Fore.CYAN + "SRTF - Hitni zadaci (Preemptive)")
     print(Fore.WHITE  + "  [3] " + Fore.CYAN + "Priority Scheduling - Misijski prioriteti")
-    print(Fore.WHITE  + "  [4] " + Fore.RED  + "Izlaz iz sistema")
+    print(Fore.WHITE  + "  [4] " + Fore.CYAN + "Uporedna analiza svih algoritama")
+    print(Fore.WHITE  + "  [5] " + Fore.RED  + "Izlaz iz sistema")
     print(Fore.YELLOW + "  " + "-" * 45)
 
 
@@ -105,6 +108,11 @@ def main():
             pokreni_priority()
 
         elif odabir == "4":
+            os.system('cls' if os.name == 'nt' else 'clear')
+            ispisi_ascii_art()
+            pokreni_analizu()
+
+        elif odabir == "5":
             # Izlaz iz aplikacije
             os.system('cls' if os.name == 'nt' else 'clear')
             ispisi_ascii_art()
@@ -114,7 +122,7 @@ def main():
 
         else:
             # Pogrešan unos
-            print(Fore.RED + "\n  ⚠ Pogrešan odabir! Unesite broj između 1 i 4.")
+            print(Fore.RED + "\n  ⚠ Pogrešan odabir! Unesite broj između 1 i 5.")
 
 
 # Pokretanje programa
