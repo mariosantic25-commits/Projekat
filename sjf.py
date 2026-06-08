@@ -8,6 +8,8 @@ init(autoreset=True)
 
 from utils import prikupi_zadatke, izracunaj_prosjeke
 from display import ispisi_tabelu, ispisi_gantt, ispisi_prosjeke
+# Uvoz modula za astronaute
+from astronauts import reset_astronauta, dodijeli_zadatak, ispisi_dodjelu, ispisi_statistiku_astronauta
 
 
 def sjf_algoritam(zadaci):
@@ -25,6 +27,9 @@ def sjf_algoritam(zadaci):
 
     # Kopija liste da ne mijenjamo originalne podatke
     neobavljeni = sorted(zadaci, key=lambda z: z["arrival_time"])
+
+    # reset liste zadatak astronauta prije simulacije
+    reset_astronauta()
 
     # Lista završenih zadataka i Gantt chart podaci
     zavrseni  = []
@@ -76,6 +81,10 @@ def sjf_algoritam(zadaci):
         # Napredak simulacije
         print(Fore.GREEN + f"  ✓ [{start}-{kraj} min] "
               + Fore.WHITE + f"{odabrani['naziv']}")
+        
+        # Dodijeli zadatak odgovarajućem astronautu i ispiši dodjelu
+        astronaut = dodijeli_zadatak(odabrani)
+        ispisi_dodjelu(odabrani, astronaut)
 
         # Pomjeri trenutno vrijeme
         trenutno_vrijeme = kraj
@@ -106,4 +115,5 @@ def pokreni_sjf():
 
     # Računanje i prikaz prosjeka
     prosjecno_cekanje, prosjecni_tat = izracunaj_prosjeke(rezultati)
+    ispisi_statistiku_astronauta()
     ispisi_prosjeke(prosjecno_cekanje, prosjecni_tat)
