@@ -87,16 +87,18 @@ def ispisi_gantt(gantt_lista):
 
     print(Fore.CYAN + "\n  === GANTT CHART ===\n")
 
-    boje_gantt = [
-        Fore.RED, Fore.YELLOW, Fore.GREEN,
-        Fore.CYAN, Fore.MAGENTA, Fore.WHITE
-    ]
+    # Boje prema tipu zadatka (1=KRITIČNO, 2=NAUČNO, 3=RUTINSKO)
+    boje_tipova = {
+        1: Fore.RED,
+        2: Fore.YELLOW,
+        3: Fore.GREEN,
+    }
 
     ukupno_vrijeme = gantt_lista[-1][2] if gantt_lista else 0
     SKALA = 1
 
-    for index, (naziv, start, kraj) in enumerate(gantt_lista):
-        boja     = boje_gantt[index % len(boje_gantt)]
+    for index, (naziv, start, kraj, tip) in enumerate(gantt_lista):
+        boja = boje_tipova.get(tip, Fore.WHITE)
         trajanje = kraj - start
 
         razmak = " " * (start * SKALA)

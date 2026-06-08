@@ -69,7 +69,7 @@ def priority_algoritam(zadaci):
         odabrani["waiting_time"]     = waiting_time
 
         # Dodaj u Gantt listu
-        gantt.append((odabrani["naziv"], start, kraj))
+        gantt.append((odabrani["naziv"], start, kraj, odabrani["tip"]))
 
         # Dodaj u završene
         zavrseni.append(odabrani)
