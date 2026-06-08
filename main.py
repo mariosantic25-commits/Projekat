@@ -13,6 +13,8 @@ from utils import prikupi_zadatke
 from sjf import pokreni_sjf
 # Uvoz Priority Scheduling modula
 from priority import pokreni_priority
+# Uvoz SRTF modula
+from srtf import pokreni_srtf
 
 # Provjera i instalacija colorama biblioteke
 try:
@@ -95,8 +97,7 @@ def main():
         elif odabir == "2":
             os.system('cls' if os.name == 'nt' else 'clear')
             ispisi_ascii_art()
-            print(Fore.YELLOW + "\n  [SRTF] Modul još nije implementiran...")
-            print(Fore.WHITE  + "  Dolazi u sljedećem commitu!\n")
+            pokreni_srtf()
 
         elif odabir == "3":
             os.system('cls' if os.name == 'nt' else 'clear')
