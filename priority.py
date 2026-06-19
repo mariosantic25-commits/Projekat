@@ -10,7 +10,6 @@ from utils import prikupi_zadatke, izracunaj_prosjeke
 from display import ispisi_tabelu, ispisi_gantt, ispisi_prosjeke
 from astronauts import reset_astronauta, dodijeli_zadatak, ispisi_dodjelu, ispisi_statistiku_astronauta
 
-
 def priority_algoritam(zadaci):
     """
     Implementacija Priority Scheduling algoritma.
@@ -123,4 +122,9 @@ def pokreni_priority():
     # Računanje i prikaz prosjeka
     prosjecno_cekanje, prosjecni_tat = izracunaj_prosjeke(rezultati)
     ispisi_prosjeke(prosjecno_cekanje, prosjecni_tat)
-    ispisi_astronaute()
+    
+    # Dodjela zadataka astronautima i ispis statistike
+    reset_astronauta()
+    for z in rezultati:
+        dodijeli_zadatak(z)
+    ispisi_statistiku_astronauta()
